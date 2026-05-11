@@ -1,0 +1,68 @@
+name: Security checks
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install project + tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit bandit[toml]
+          pip install -e ".[dev]"
+
+      - name: pip-audit (dependency CVE scan)
+        run: pip-audit -r pyproject.toml --desc on
+
+      - name: Export requirements for supply-chain archives
+        run: pip freeze > requirements-freeze.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pip-freeze
+          path: requirements-freeze.txt
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install bandit
+        run: pip install 'bandit[toml]'
+
+      - name: Bandit (Python SAST)
+        run: bandit -r app -f screen --severity-level medium --confidence-level medium
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Pytest (including tests/security)
+        run: pytest tests -q

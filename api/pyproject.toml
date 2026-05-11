@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "student-platform-api"
+version = "0.1.0"
+description = "Secure MVP foundation for student enrollment and academic performance tracking"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.27.0",
+    "alembic>=1.14.0",
+    "argon2-cffi>=23.1.0",
+    "asyncpg>=0.30.0",
+    "email-validator>=2.2.0",
+    "faker>=30.0.0",
+    "fastapi>=0.115.0",
+    "greenlet>=3.1.0",
+    "prometheus-client>=0.21.0",
+    "prometheus-fastapi-instrumentator>=7.0.0",
+    "pyjwt[crypto]>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "redis>=5.2.0",
+    "python-multipart>=0.0.12",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "structlog>=24.4.0",
+    "uvicorn[standard]>=0.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "bandit[toml]>=1.7.0",
+    "black>=24.0.0",
+    "coverage[toml]>=7.6.0",
+    "mypy>=1.13.0",
+    "pip-audit>=2.7.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+    "types-pyopenssl",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+omit = [
+    "alembic/*",
+    "*/tests/*",
+]
+
+[tool.coverage.report]
+precision = 1
+show_missing = true
+skip_empty = true
+fail_under = 35
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+ignore_missing_imports = true
+strict_optional = true
+# Only analyze modules listed in `files`; do not follow into ORM models / rest of app.
+follow_imports = "skip"
+files = [
+    "app/academic/gpa.py",
+    "app/security/safe_query.py",
+    "app/security/validators.py",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "alembic"]

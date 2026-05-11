@@ -1,0 +1,10 @@
+apiVersion: 1
+
+providers:
+  - name: Security dashboards
+    folder: Security
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 3600
+    options:
+      path: /var/lib/grafana/dashboards

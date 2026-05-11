@@ -1,0 +1,2 @@
+# Shell scripts must use LF so Linux containers (ENTRYPOINT) do not fail with `sh\r`.
+*.sh text eol=lf

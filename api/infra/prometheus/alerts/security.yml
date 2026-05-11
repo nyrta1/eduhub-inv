@@ -1,0 +1,26 @@
+groups:
+  - name: student-platform-security
+    rules:
+      - alert: SensitiveRouteRateLimitedBurst
+        expr: sum(increase(security_sensitive_route_limited_total[5m])) > 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Elevated sensitive-route rate limiting (possible automation attack)
+
+      - alert: HttpDeniedResponsesHigh
+        expr: sum(rate(security_http_denied_total[5m])) > 10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: High volume of HTTP 401/403 responses (credential stuffing or authz probing)
+
+      - alert: SecurityDeniedBurstAlerts
+        expr: increase(security_denied_burst_alerts_total[15m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Client exceeded denied-response burst threshold — investigate source IP and WAF logs
