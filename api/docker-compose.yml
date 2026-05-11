@@ -186,7 +186,7 @@ services:
       API_PORT: ${API_PORT:-8000}
       # Include `api` so Prometheus scrape (Host: api) passes TrustedHostMiddleware.
       API_ALLOWED_HOSTS: ${API_ALLOWED_HOSTS:-localhost,127.0.0.1,api}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080,http://localhost:5173}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080,http://localhost:5173,http://ec2-100-31-52-198.compute-1.amazonaws.com}
       DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://app_user:app_password@postgres:5432/app_db}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}

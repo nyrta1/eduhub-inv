@@ -1,0 +1,7 @@
+services:
+  ui:
+    build: .
+    container_name: edu-ui
+    restart: unless-stopped
+    ports:
+      - "80:8080"
