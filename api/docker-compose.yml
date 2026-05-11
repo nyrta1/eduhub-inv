@@ -191,7 +191,7 @@ services:
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       LOG_JSON: ${LOG_JSON:-true}
-      LOG_SHIP_LOGSTASH: ${LOG_SHIP_LOGSTASH:-false}
+      LOG_SHIP_LOGSTASH: ${LOG_SHIP_LOGSTASH:-true}
       LOGSTASH_HTTP_ENDPOINT: ${LOGSTASH_HTTP_ENDPOINT:-http://logstash:5044}
       METRICS_ENABLED: ${METRICS_ENABLED:-true}
       METRICS_PATH: ${METRICS_PATH:-/metrics}
